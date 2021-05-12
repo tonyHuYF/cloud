@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: gateway
+    name: gateway-test
 
   cloud:
     nacos:
@@ -11,16 +11,23 @@ spring:
         server-addr: 192.168.1.216:8848
 
     gateway:
+      # 自动发现并注册微服务到Nacos
+      discovery:
+        locator:
+          enabled: true
+          # 请求服务名配置为小写
+          lower-case-service-id: true
+          # 自定义路由配置
       routes:
         - id: provider
           uri: lb://provider
           predicates:
-            - Path=/provider/**
+            - Path=/provider-demo/**
           filters:
             - StripPrefix=1
         - id: consumer
           uri: lb://consumer
           predicates:
-            - Path=/consumer/**
+            - Path=/consumer-demo/**
           filters:
             - StripPrefix=1
