@@ -15,6 +15,7 @@ public class GatewayLogFilter implements GlobalFilter, Ordered {
 
     private static final String BEGIN_TIME = "beginTime";
 
+    @Override
     public Mono<Void> filter(final ServerWebExchange exchange, GatewayFilterChain chain) {
 
         exchange.getAttributes().put(BEGIN_TIME, DateUtil.current());
@@ -27,6 +28,7 @@ public class GatewayLogFilter implements GlobalFilter, Ordered {
                         log.info("访问接口host: " + exchange.getRequest().getURI().getHost());
                         log.info("访问接口端口: " + exchange.getRequest().getURI().getPort());
                         log.info("访问接口URL: " + exchange.getRequest().getURI().getPath());
+                        log.info("访问接口URL参数: " + exchange.getRequest().getURI().getRawQuery());
                         log.info("访问接口时间: " + (DateUtil.current() - startTime) + "ms");
                         log.info("=============================Gateway打印日志结束===============================");
                     }
@@ -34,7 +36,8 @@ public class GatewayLogFilter implements GlobalFilter, Ordered {
         );
     }
 
+    @Override
     public int getOrder() {
-        return 0;
+        return -10000;
     }
 }
